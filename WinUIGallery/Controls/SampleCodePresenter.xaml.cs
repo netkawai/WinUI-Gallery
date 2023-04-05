@@ -167,8 +167,12 @@ namespace AppUIBasics.Controls
             if (sourceRelativePath != null && sourceRelativePath.EndsWith("txt"))
             {
                 Uri derivedSource = GetDerivedSource(sourceRelativePath);
+#if UNPACKAGED
+                string sampleString = await AppUIBasics.Common.FileLoader.LoadText(@"." + derivedSource.Host + derivedSource.PathAndQuery);
+#else
                 var file = await StorageFile.GetFileFromApplicationUriAsync(derivedSource);
                 string sampleString = await FileIO.ReadTextAsync(file);
+#endif
 
                 FormatAndRenderSampleFromString(sampleString, presenter, highlightLanguage);
             }
